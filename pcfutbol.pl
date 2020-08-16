@@ -21,51 +21,23 @@ post '/image' => sub {
     my $tempdir = File::Temp->newdir(TEMPLATE => '/tmp/pcfutbolXXXXXXX');
 
     my ($ext) = $upload->filename =~ m/\.(\w+)/;
-    my $filename = "$tempdir/image" . ($ext ? $ext : "jpg");
+    my $filename = "$tempdir/image." . ($ext ? $ext : "jpg");
     $upload->move_to($filename);
 
-    my $palette = Image::Magick->new;
-    $palette->Read('./palette.bmp');
+    my @image_urls;
 
-    my $image = Image::Magick->new;
-    $image->Read($filename);
+    if ($self->param('image_type') eq 'player') {
+        my $imagedata = capturex('./scripts/convert-player', qq{$filename});
+        push(@image_urls, 'data:image/bmp;base64,' . b64_encode($imagedata));
+    } elsif ($self->param('image_type') eq 'team') {
+        my $imagedata = capturex('./scripts/convert-team-logo-mini', qq{$filename});
+        push(@image_urls, 'data:image/bmp;base64,' . b64_encode($imagedata));
 
-    $image->Set(alpha => 'Remove');
+        $imagedata = capturex('./scripts/convert-team-logo-nano', qq{$filename});
+        push(@image_urls, 'data:image/bmp;base64,' . b64_encode($imagedata));
+    }
 
-    my $bmp_filename_0 = "$filename.0.bmp";
-    $image->Write("BMP2:$bmp_filename_0");
-
-    $image = Image::Magick->new;
-    $image->Read($bmp_filename_0);
-    $image->Resize(geometry => '32x32');
-
-    my $bmp_filename_1 = "$filename.1.bmp";
-    $image->Write($bmp_filename_1);
-
-    $image = Image::Magick->new;
-    $image->Read($bmp_filename_1);
-    $image->Shave(geometry => '1x1');
-    $image->Border(geometry => '1x1', bordercolor => 'Black');
-    $image->Set(type => 'Palette');
-    $image->Set(compression => 'None');
-    $image->Remap(image => $palette);
-
-    my $bmp_filename = "$filename.bmp";
-    $image->Write("BMP2:$bmp_filename");
-
-    my $fixed_bmp_filename = "$tempdir/output.bmp";
-
-    my $imagedata = capturex(
-        '/home/sebbe/build/pcx-utils/bin/pcx-colourpalette',
-        qq{bmp=$bmp_filename},
-    );
-
-    my $data_url = 'data:image/bmp;base64,' . b64_encode($imagedata);
-
-    $self->stash(
-        image_url     => $data_url,
-    );
-
+    $self->stash(image_urls => \@image_urls);
     $self->render(template => 'image');
 
 };

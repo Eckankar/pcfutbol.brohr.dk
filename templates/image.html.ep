@@ -5,15 +5,33 @@
 <p>Based on the work by <a href="https://gitlab.com/spisemisu/pcx-utils">Ramón Soto Mathiesen</a></p>
 
 <form action="/image" method="post" enctype="multipart/form-data">
-    <div class="input-group mb-3">
+    <div class="form-group">
+        <label for="image">Image to convert</label>
         <input type="file" name="image" class="form-control">
     </div>
-    <input type="submit" class="btn btn-primary">
+    <div class="form-group">
+        <label for="image_type">Type of image</label>
+        <div class="input-group">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="image_type_player" type="radio" name="image_type" value="player" checked>
+                <label class="form-check-label" for="image_type_player">Player image</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" id="image_type_player" type="radio" name="image_type" value="team">
+                <label class="form-check-label" for="image_type_player">Team logo</label>
+            </div>
+        </div>
+    </div>
+    <input type="submit" class="btn btn-primary mb-2">
 </form>
 
-% if (stash('image_url')) {
-    <h2>Converted image:</h2>
+% if (stash('image_urls')) {
+    % my @image_urls = @{ stash('image_urls') };
+    % my $plural = @image_urls > 1 ? 's' : '';
+    <h2>Converted image<%= $plural %>:</h2>
     <p>
-        <img src="<%= stash('image_url') %>"/>
+        % for my $image_url (@image_urls) {
+        <img src="<%= $image_url %>"/>
+        % }
     </p>
 % }

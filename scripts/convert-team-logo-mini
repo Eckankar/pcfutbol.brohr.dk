@@ -1,0 +1,14 @@
+#!/bin/bash
+
+TMP="$(mktemp -d /tmp/pcfutbol-team-mini-XXXXXXX)"
+INPUT_FILE="$1"
+
+# Based on https://gitlab.com/spisemisu/pcx-utils/-/blob/master/fut-img-teamext.sh
+convert "$INPUT_FILE" -background black -alpha off -type palette -compress none -remap palette.bmp "BMP2:$TMP/0.bmp"
+convert "$TMP/0.bmp" -resize 48x48 -gravity center -crop 48x64+0+0 "BMP2:$TMP/1.bmp"
+convert "$TMP/1.bmp" -background black -alpha off -type palette -compress none -remap palette.bmp "BMP2:$TMP/2.bmp"
+
+bin/pcx-colourpalette "bmp=$TMP/2.bmp"
+
+rm -r "$TMP"
+
