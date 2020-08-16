@@ -70,25 +70,6 @@ post '/image' => sub {
 
 };
 
-# convert fut/imgs/players/\(.uniqueId).png \\
-#         alpha remove \\
-#         BMP2:fut/temp/\(.id).bmp
-# convert fut/temp/\(.id).bmp \\
-#         resize 32x32 \\
-#         BMP2:fut/temp/\(.id)_mini.bmp
-# convert fut/temp/\(.id)_mini.bmp \\
-#         shave 1x1 \\
-#         bordercolor Black \\
-#         border 1x1 \\
-#         type palette \\
-#         compress none \\
-#         remap fut/meta/palette.bmp \\
-#         BMP2:fut/temp/\(.id)_mini_.bmp
-# ./bin/pcx-colourpalette \\
-#         bmp=fut/temp/\(.id)_mini_.bmp \\
-#         fut/data/minifoto/j96$(printf %05d \(.id)).bmp"
-
-
 app->defaults(layout => 'bootstrap');
 
 app->config(hypnotoad => {
