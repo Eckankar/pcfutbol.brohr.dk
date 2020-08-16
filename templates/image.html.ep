@@ -1,0 +1,19 @@
+<h1>PC Futból Image Converter</h1>
+
+<p>This tool converts an image to an appropriate format for usage in PC Futból 6.0.</p>
+
+<p>Based on the work by <a href="https://gitlab.com/spisemisu/pcx-utils">Ramón Soto Mathiesen</a></p>
+
+<form action="/image" method="post" enctype="multipart/form-data">
+    <div class="input-group mb-3">
+        <input type="file" name="image" class="form-control">
+    </div>
+    <input type="submit" class="btn btn-primary">
+</form>
+
+% if (stash('image_url')) {
+    <h2>Converted image:</h2>
+    <p>
+        <img src="<%= stash('image_url') %>"/>
+    </p>
+% }

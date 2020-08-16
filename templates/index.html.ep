@@ -1,0 +1,7 @@
+<h1>PC Futból Utils</h1>
+
+<ul>
+    <li>
+        %= link_to "Image tool" => '/image'
+    </li>
+</ul>
