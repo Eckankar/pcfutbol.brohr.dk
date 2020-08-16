@@ -2,7 +2,10 @@
 
 <p>This tool converts an image to an appropriate format for usage in PC Futból 6.0.</p>
 
-<p>Based on the work by <a href="https://gitlab.com/spisemisu/pcx-utils">Ramón Soto Mathiesen</a>. Find the source on [GitHub](https://github.com/Eckankar/pcfutbol.brohr.dk).</p>
+<p>
+    Based on the work by <a href="https://gitlab.com/spisemisu/pcx-utils">Ramón Soto Mathiesen</a>.
+    Find the source of this page on <a href="https://github.com/Eckankar/pcfutbol.brohr.dk">GitHub</a>.
+</p>
 
 <form action="/image" method="post" enctype="multipart/form-data">
     <div class="form-group">
